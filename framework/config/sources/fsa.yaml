@@ -1,5 +1,5 @@
 # FSA Debt Recovery Debtor Days
-# Genuinely mixed file formats (2 CSV, 1 XLSX pattern across releases).
+# Genuinely mixed file formats (3 CSV, 1 XLSX pattern across releases).
 
 source_publisher: FSA
 indicator_code: MEAT_INDUSTRY_DEBTOR_DAYS
