@@ -1,0 +1,175 @@
+# Insolvency Service — Individual Insolvency Statistics (Long-Run Series)
+# Scope: England & Wales, monthly grain, 30 indicators.
+# Northern Ireland, authorising-body breakdown, and IVA Outcomes are
+# separate data products with different grains -- added in a follow-up
+# config extension, not here.
+#
+# column_mapping below was GENERATED from the publisher's own metadata
+# file (framework/config/generate_insolvency_config.py), not hand-typed --
+# a genuine example of a metadata-driven pipeline, not just the name.
+
+source_publisher: INSOLVENCY_SERVICE
+
+files:
+  - path: "bronze/insolvency_service/Long-Run_Series_in_CSV_Format_-_Individual_Insolvency_Statistics_October_2024.csv"
+    format: csv
+  - path: "bronze/insolvency_service/Long-Run_Series_in_CSV_Format_-_Individual_Insolvency_Statistics_December_2025.csv"
+    format: csv
+  - path: "bronze/insolvency_service/Long-Run_Series_in_CSV_Format_-_Individual_Insolvency_Statistics_July_2026.csv"
+    format: csv
+
+period_grain: MONTH
+
+column_mapping:
+  - source_column: EW_total_individuals_SA
+    indicator_code: EW_TOTAL_INDIVIDUALS_SA
+    indicator_name: "Total individual insolvencies seasonally adjusted"
+    geography: "England & Wales"
+    unit: count
+  - source_column: EW_bankruptcy_SA
+    indicator_code: EW_BANKRUPTCY_SA
+    indicator_name: Bankruptcies
+    geography: England & Wales
+    unit: count
+  - source_column: EW_DRO_SA
+    indicator_code: EW_DRO_SA
+    indicator_name: Debt relief orders
+    geography: England & Wales
+    unit: count
+  - source_column: EW_IVA_SA
+    indicator_code: EW_IVA_SA
+    indicator_name: Individual voluntary arrangements, including deeds of arrangement
+    geography: England & Wales
+    unit: count
+  - source_column: EW_total_individuals_NSA
+    indicator_code: EW_TOTAL_INDIVIDUALS_NSA
+    indicator_name: Total individual insolvencies
+    geography: England & Wales
+    unit: count
+  - source_column: EW_bankruptcy_NSA
+    indicator_code: EW_BANKRUPTCY_NSA
+    indicator_name: Bankruptcies
+    geography: England & Wales
+    unit: count
+  - source_column: EW_DRO_NSA
+    indicator_code: EW_DRO_NSA
+    indicator_name: Debt relief orders
+    geography: England & Wales
+    unit: count
+  - source_column: EW_IVA_NSA
+    indicator_code: EW_IVA_NSA
+    indicator_name: Individual voluntary arrangements, including deeds of arrangement
+    geography: England & Wales
+    unit: count
+  - source_column: EW_IVA_approved_SA
+    indicator_code: EW_IVA_APPROVED_SA
+    indicator_name: Individual voluntary arrangements by approval date
+    geography: England & Wales
+    unit: count
+  - source_column: EW_IVA_approved_NSA
+    indicator_code: EW_IVA_APPROVED_NSA
+    indicator_name: Individual voluntary arrangements by approval date
+    geography: England & Wales
+    unit: count
+  - source_column: EW_IVA_approved_rate_per_10000
+    indicator_code: EW_IVA_APPROVED_RATE_PER_10000
+    indicator_name: IVAs by approval date 12-month rolling rate per 10000 adults
+    geography: England & Wales
+    unit: rate per 10,000 adults
+  - source_column: EW_individual_rate_per_10000
+    indicator_code: EW_INDIVIDUAL_RATE_PER_10000
+    indicator_name: Individual insolvency 12-month rolling rate per 10000 adults
+    geography: England & Wales
+    unit: rate per 10,000 adults
+  - source_column: EW_bankruptcy_rate_per_10000
+    indicator_code: EW_BANKRUPTCY_RATE_PER_10000
+    indicator_name: Bankruptcy 12-month rolling rate per 10000 adults
+    geography: England & Wales
+    unit: rate per 10,000 adults
+  - source_column: EW_DRO_rate_per_10000
+    indicator_code: EW_DRO_RATE_PER_10000
+    indicator_name: DRO 12-month rolling rate per 10000 adults
+    geography: England & Wales
+    unit: rate per 10,000 adults
+  - source_column: EW_IVA_rate_per_10000
+    indicator_code: EW_IVA_RATE_PER_10000
+    indicator_name: IVA 12-month rolling rate per 10000 adults
+    geography: England & Wales
+    unit: rate per 10,000 adults
+  - source_column: EW_creditor_bankrupt_SA
+    indicator_code: EW_CREDITOR_BANKRUPT_SA
+    indicator_name: Creditor petition bankruptcies
+    geography: England & Wales
+    unit: count
+  - source_column: EW_debtor_bankrupt_SA
+    indicator_code: EW_DEBTOR_BANKRUPT_SA
+    indicator_name: Debtor application bankruptcies
+    geography: England & Wales
+    unit: count
+  - source_column: EW_creditor_bankrupt_NSA
+    indicator_code: EW_CREDITOR_BANKRUPT_NSA
+    indicator_name: Creditor petition bankruptcies
+    geography: England & Wales
+    unit: count
+  - source_column: EW_debtor_bankrupt_NSA
+    indicator_code: EW_DEBTOR_BANKRUPT_NSA
+    indicator_name: Debtor application bankruptcies
+    geography: England & Wales
+    unit: count
+  - source_column: EW_self_employed_bankrupt_SA
+    indicator_code: EW_SELF_EMPLOYED_BANKRUPT_SA
+    indicator_name: Trader bankruptcies
+    geography: England & Wales
+    unit: count
+  - source_column: EW_other_bankrupt_SA
+    indicator_code: EW_OTHER_BANKRUPT_SA
+    indicator_name: Non trader bankruptcies
+    geography: England & Wales
+    unit: count
+  - source_column: EW_self_employed_bankrupt_NSA
+    indicator_code: EW_SELF_EMPLOYED_BANKRUPT_NSA
+    indicator_name: Trader bankruptcies
+    geography: England & Wales
+    unit: count
+  - source_column: EW_other_bankrupt_NSA
+    indicator_code: EW_OTHER_BANKRUPT_NSA
+    indicator_name: Non trader bankruptcies
+    geography: England & Wales
+    unit: count
+  - source_column: EW_unknown_bankrupt_NSA
+    indicator_code: EW_UNKNOWN_BANKRUPT_NSA
+    indicator_name: Non trader bankruptcies
+    geography: England & Wales
+    unit: count
+  - source_column: EW_total_IPO_IPA_NSA
+    indicator_code: EW_TOTAL_IPO_IPA_NSA
+    indicator_name: Bankruptcies resulting in IPO or IPA
+    geography: England & Wales
+    unit: count
+  - source_column: EW_IPO_NSA
+    indicator_code: EW_IPO_NSA
+    indicator_name: Bankruptcies resulting in IPO
+    geography: England & Wales
+    unit: count
+  - source_column: EW_IPA_NSA
+    indicator_code: EW_IPA_NSA
+    indicator_name: Bankruptcies resulting in IPA
+    geography: England & Wales
+    unit: count
+  - source_column: EW_total_breathing_space_NSA
+    indicator_code: EW_TOTAL_BREATHING_SPACE_NSA
+    indicator_name: Total breathing space registrations
+    geography: England & Wales
+    unit: count
+  - source_column: EW_standard_breathing_space_NSA
+    indicator_code: EW_STANDARD_BREATHING_SPACE_NSA
+    indicator_name: Standard breathing space registrations
+    geography: England & Wales
+    unit: count
+  - source_column: EW_mental_health_breathing_space_NSA
+    indicator_code: EW_MENTAL_HEALTH_BREATHING_SPACE_NSA
+    indicator_name: Mental health breathing space registrations
+    geography: England & Wales
+    unit: count
+
+dedup_key: [source_publisher, indicator_code, geography, period_date]

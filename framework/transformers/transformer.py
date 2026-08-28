@@ -11,59 +11,67 @@ import hashlib
 from datetime import datetime, timezone
 
 
-def transform_row(raw_row: dict, config: dict, source_file: str, source_format: str) -> dict:
+def transform_row(raw_row: dict, config: dict, source_file: str, source_format: str) -> list[dict]:
     """
-    Transform one raw row into a Silver-shaped record.
+    Transform one raw row into one OR MORE Silver-shaped records.
+
+    FSA-style configs (flat column_mapping, one indicator) produce
+    exactly one record. Insolvency Service-style configs (a list of
+    column mappings, many indicators per row) produce one record per
+    mapping entry that has a real value for this particular row.
     """
-    # Job 3: drop artifact keys (e.g. the '' key from trailing-comma CSVs).
-    # Deliberately done here, not in the reader -- readers stay dumb.
     clean_row = {k: v for k, v in raw_row.items() if k}
 
-    # Pull real values using the config's column mapping, not hardcoded
-    # column names -- this is what makes the function source-agnostic.
-    period_raw = clean_row[config["column_mapping"]["period_column"]]
-    value_raw = clean_row[config["column_mapping"]["value_column"]]
+    # Detect which config shape we're dealing with, and normalise
+    # into a single list of mapping entries either way -- this means
+    # everything below this point is written ONCE, not duplicated
+    # per shape.
+    mapping = config["column_mapping"]
+    if isinstance(mapping, dict):
+        entries = [{
+            "source_column": mapping["period_column"],  # placeholder, period handled separately below
+            "indicator_code": config["indicator_code"],
+            "indicator_name": config["indicator_name"],
+            "geography": config["geography"],
+            "unit": config["unit"],
+        }]
+        value_columns = [mapping["value_column"]]
+        period_column = mapping["period_column"]
+    else:
+        entries = mapping
+        value_columns = [e["source_column"] for e in entries]
+        period_column = "period"  # Insolvency Service's real period column name
 
-    # Job 2: normalise the period into a real date, first-of-month.
+    period_raw = clean_row[period_column]
     period_date = datetime.strptime(period_raw + "-01", "%Y-%m-%d").date()
 
-    # Job 1: force the value into a proper number, regardless of whether
-    # it arrived as a string (CSV) or an int (XLSX).
-    indicator_value = float(value_raw)
+    results = []
+    for entry, source_col in zip(entries, value_columns):
+        raw_value = clean_row.get(source_col)
+        if raw_value in (None, "", "[x]", "[z]"):
+            continue  # not available / not applicable -- skip, don't fail the whole row
 
-    # Job 7: validate before handing off.
-    if indicator_value < 0:
-        raise ValueError(
-            f"Negative indicator_value ({indicator_value}) for "
-            f"{config['indicator_code']} in period {period_raw} "
-            f"from {source_file} -- refusing to load."
-        )
+        indicator_value = float(raw_value)
+        if indicator_value < 0:
+            raise ValueError(f"Negative value for {entry['indicator_code']} in {period_raw} from {source_file}")
 
-    # Job 5: build the deterministic surrogate key. Same inputs always
-    # produce the same key -- this is what makes the loader's
-    # MERGE/upsert idempotent, the actual fix for the duplicate-row
-    # problem measured in the legacy scripts.
-    key_fields = [
-        config["source_publisher"],
-        config["indicator_code"],
-        config["geography"],
-        str(period_date),
-    ]
-    indicator_id = hashlib.sha256("|".join(key_fields).encode()).hexdigest()
+        key_fields = [config["source_publisher"], entry["indicator_code"], entry["geography"], str(period_date)]
+        indicator_id = hashlib.sha256("|".join(key_fields).encode()).hexdigest()
 
-    # Job 4 + 6: attach identity fields (from config) and lineage fields.
-    return {
-        "indicator_id": indicator_id,
-        "source_publisher": config["source_publisher"],
-        "indicator_code": config["indicator_code"],
-        "indicator_name": config["indicator_name"],
-        "geography": config["geography"],
-        "period_date": period_date,
-        "period_grain": config["period_grain"],
-        "indicator_value": indicator_value,
-        "unit": config["unit"],
-        "dim_supplier": None,  # only populated for Ofgem's SNAPSHOT grain, later
-        "source_file": source_file,
-        "source_format": source_format,
-        "extracted_at": datetime.now(timezone.utc),
-    }
+        results.append({
+            "indicator_id": indicator_id,
+            "source_publisher": config["source_publisher"],
+            "indicator_code": entry["indicator_code"],
+            "indicator_name": entry["indicator_name"],
+            "geography": entry["geography"],
+            "period_date": period_date,
+            "period_grain": config["period_grain"],
+            "indicator_value": indicator_value,
+            "unit": entry["unit"],
+            "dim_supplier": None,
+            "source_file": source_file,
+            "source_format": source_format,
+            "extracted_at": datetime.now(timezone.utc),
+        })
+
+    return results

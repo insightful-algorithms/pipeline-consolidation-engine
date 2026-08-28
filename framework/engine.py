@@ -33,7 +33,7 @@ def run_source(config_path: str) -> dict:
         reader_fn = READERS[file_entry["format"]]
         raw_rows = reader_fn(file_entry)
         for raw_row in raw_rows:
-            all_rows.append(
+            all_rows.extend(
                 transform_row(
                     raw_row,
                     config,
