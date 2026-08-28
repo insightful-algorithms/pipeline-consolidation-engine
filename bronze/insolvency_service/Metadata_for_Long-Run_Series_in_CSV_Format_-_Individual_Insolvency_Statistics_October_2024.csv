@@ -1,0 +1,43 @@
+﻿Dataset,Individual Insolvency Statistics: October 2024,,,,
+Release date,19/11/2024,,,,
+Expiry date,17/12/2024,,,,
+Licence,Open Government Licence 3.0,,,,
+URL,https://assets.publishing.service.gov.uk/media/673b722572f19089dfdadf29/Long-Run_Series_in_CSV_Format_-_Individual_Insolvency_Statistics_October_2024.csv,,,,
+Not applicable,[z],,,,
+Not available,[x],,,,
+More information,https://www.gov.uk/government/statistics/individual-insolvencies-october-2024,,,,
+,,,,,
+Variable,Description,Geography,Is_Seasonally_Adjusted,Publication_Table,Source
+Period,Concatenated calendar year and month,All,All,All,All
+Year,Calendar year,All,All,All,All
+Month,Month,All,All,All,All
+EW_total_individuals_SA,Total individual insolvencies seasonally adjusted,England and Wales,Y,1a,Insolvency Service
+EW_bankruptcy_SA,Bankruptcies,England and Wales,Y,1a,Insolvency Service
+EW_DRO_SA,Debt relief orders,England and Wales,Y,1a,Insolvency Service
+EW_IVA_SA,"Individual voluntary arrangements, including deeds of arrangement",England and Wales,Y,1a,Insolvency Service
+EW_total_individuals_NSA,Total individual insolvencies,England and Wales,N,1b,Insolvency Service
+EW_bankruptcy_NSA,Bankruptcies,England and Wales,N,1b,Insolvency Service
+EW_DRO_NSA,Debt relief orders,England and Wales,N,1b,Insolvency Service
+EW_IVA_NSA,"Individual voluntary arrangements, including deeds of arrangement",England and Wales,N,1b,Insolvency Service
+EW_IVA_approved_SA,Individual voluntary arrangements by approval date,England and Wales,Y,1c,Insolvency Service
+EW_IVA_approved_NSA,Individual voluntary arrangements by approval date,England and Wales,N,1c,Insolvency Service
+EW_IVA_approved_rate_per_10000,IVAs by approval date 12-month rolling rate per 10000 adults,England and Wales,N,1c,Insolvency Service
+EW_individual_rate_per_10000,Individual insolvency 12-month rolling rate per 10000 adults,England and Wales,N,2,Insolvency Service
+EW_bankruptcy_rate_per_10000,Bankruptcy 12-month rolling rate per 10000 adults,England and Wales,N,2,Insolvency Service
+EW_DRO_rate_per_10000,DRO 12-month rolling rate per 10000 adults,England and Wales,N,2,Insolvency Service
+EW_IVA_rate_per_10000,IVA 12-month rolling rate per 10000 adults,England and Wales,N,2,Insolvency Service
+EW_creditor_bankrupt_SA,Creditor petition bankruptcies,England and Wales,Y,3a,Insolvency Service
+EW_debtor_bankrupt_SA,Debtor application bankruptcies,England and Wales,Y,3a,Insolvency Service
+EW_creditor_bankrupt_NSA,Creditor petition bankruptcies,England and Wales,N,3b,Insolvency Service
+EW_debtor_bankrupt_NSA,Debtor application bankruptcies,England and Wales,N,3b,Insolvency Service
+EW_self_employed_bankrupt_SA,Trader bankruptcies,England and Wales,Y,4a,Insolvency Service
+EW_other_bankrupt_SA,Non trader bankruptcies,England and Wales,Y,4a,Insolvency Service
+EW_self_employed_bankrupt_NSA,Trader bankruptcies,England and Wales,N,4b,Insolvency Service
+EW_other_bankrupt_NSA,Non trader bankruptcies,England and Wales,N,4b,Insolvency Service
+EW_unknown_bankrupt_NSA,Non trader bankruptcies,England and Wales,N,4b,Insolvency Service
+EW_total_IPO_IPA_NSA,Bankruptcies resulting in IPO or IPA,England and Wales,N,5,Insolvency Service
+EW_IPO_NSA,Bankruptcies resulting in IPO,England and Wales,N,5,Insolvency Service
+EW_IPA_NSA,Bankruptcies resulting in IPA,England and Wales,N,5,Insolvency Service
+EW_total_breathing_space_NSA,Total breathing space registrations,England and Wales,N,6,Insolvency Service
+EW_standard_breathing_space_NSA,Standard breathing space registrations,England and Wales,N,6,Insolvency Service
+EW_mental_health_breathing_space_NSA,Mental health breathing space registrations,England and Wales,N,6,Insolvency Service
