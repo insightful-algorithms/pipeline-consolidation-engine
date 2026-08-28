@@ -1,0 +1,26 @@
+# FSA Debt Recovery Debtor Days
+# Genuinely mixed file formats (2 CSV, 1 XLSX pattern across releases).
+
+source_publisher: FSA
+indicator_code: MEAT_INDUSTRY_DEBTOR_DAYS
+indicator_name: "Meat Industry Debtor Days"
+geography: "England, Wales & Northern Ireland"
+unit: days
+period_grain: MONTH
+
+files:
+  - path: bronze/fsa/20241017Rolling12MnthsofDebtorDaysInformationfortheMeatIndustryDebt.xlsx
+    format: xlsx
+    sheet: "in"
+  - path: bronze/fsa/20241213Rolling12MnthsofDebtorDaysInformationfortheMeatIndustryDebt.csv
+    format: csv
+  - path: "bronze/fsa/20260121Rolling12MnthsofDebtorDaysInformationfortheMeatIndustryDebt(in)(1).csv"
+    format: csv
+  - path: "bronze/fsa/202606Rolling12MnthsofDebtorDaysInformationfortheMeatIndustryDebt (1).csv"
+    format: csv
+
+column_mapping:
+  period_column: InvoiceMonth
+  value_column: MeatIndustry
+
+dedup_key: [source_publisher, indicator_code, geography, period_date]
