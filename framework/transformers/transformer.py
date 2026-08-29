@@ -22,14 +22,10 @@ def transform_row(raw_row: dict, config: dict, source_file: str, source_format: 
     """
     clean_row = {k: v for k, v in raw_row.items() if k}
 
-    # Detect which config shape we're dealing with, and normalise
-    # into a single list of mapping entries either way -- this means
-    # everything below this point is written ONCE, not duplicated
-    # per shape.
     mapping = config["column_mapping"]
     if isinstance(mapping, dict):
         entries = [{
-            "source_column": mapping["period_column"],  # placeholder, period handled separately below
+            "source_column": mapping["period_column"],
             "indicator_code": config["indicator_code"],
             "indicator_name": config["indicator_name"],
             "geography": config["geography"],
@@ -40,7 +36,7 @@ def transform_row(raw_row: dict, config: dict, source_file: str, source_format: 
     else:
         entries = mapping
         value_columns = [e["source_column"] for e in entries]
-        period_column = "period"  # Insolvency Service's real period column name
+        period_column = "period"
 
     period_raw = clean_row[period_column]
     period_date = datetime.strptime(period_raw + "-01", "%Y-%m-%d").date()
@@ -49,13 +45,23 @@ def transform_row(raw_row: dict, config: dict, source_file: str, source_format: 
     for entry, source_col in zip(entries, value_columns):
         raw_value = clean_row.get(source_col)
         if raw_value in (None, "", "[x]", "[z]"):
-            continue  # not available / not applicable -- skip, don't fail the whole row
+            continue
 
         indicator_value = float(raw_value)
         if indicator_value < 0:
             raise ValueError(f"Negative value for {entry['indicator_code']} in {period_raw} from {source_file}")
 
-        key_fields = [config["source_publisher"], entry["indicator_code"], entry["geography"], str(period_date)]
+        # Build a lookup of every value that COULD be part of a dedup key,
+        # then genuinely read config["dedup_key"] to decide which of these
+        # actually get hashed, in the order it specifies. This is what
+        # makes dedup_key a real, load-bearing config field.
+        available_values = {
+            "source_publisher": config["source_publisher"],
+            "indicator_code": entry["indicator_code"],
+            "geography": entry["geography"],
+            "period_date": str(period_date),
+        }
+        key_fields = [str(available_values[field]) for field in config["dedup_key"]]
         indicator_id = hashlib.sha256("|".join(key_fields).encode()).hexdigest()
 
         results.append({
