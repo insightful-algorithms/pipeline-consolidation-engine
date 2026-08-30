@@ -37,19 +37,12 @@ indicators:
   file_path: bronze/ofgem/average-level-of-debt-re.csv
   period_column: Category
   value_column: Gas
-- indicator_code: ELECTRICITY_PREPAYMENT_M__COL_1
-  indicator_name: Electricity prepayment meter debt by supplier - col_1
-  period_grain: SNAPSHOT
-  unit: supplier_comparison
-  file_path: bronze/ofgem/electricity-prepayment-m.csv
-  period_column: null
-  value_column: col_1
 - indicator_code: ELECTRICITY_PREPAYMENT_M__GBP_WEEK
   indicator_name: Electricity prepayment meter debt by supplier - £/week
   period_grain: SNAPSHOT
   unit: supplier_comparison
   file_path: bronze/ofgem/electricity-prepayment-m.csv
-  period_column: null
+  period_column: col_1
   value_column: £/week
 - indicator_code: ELECTRICITY_PREPAYMENT_P__WEEKS
   indicator_name: Electricity prepayment debt weeks by supplier - Weeks
@@ -58,19 +51,12 @@ indicators:
   file_path: bronze/ofgem/electricity-prepayment-p.csv
   period_column: Category
   value_column: Weeks
-- indicator_code: GAS_PREPAYMENT_METER_CUS__COL_1
-  indicator_name: Gas prepayment meter debt by supplier - col_1
-  period_grain: SNAPSHOT
-  unit: supplier_comparison
-  file_path: bronze/ofgem/gas-prepayment-meter-cus.csv
-  period_column: null
-  value_column: col_1
 - indicator_code: GAS_PREPAYMENT_METER_CUS__GBP_WEEK
   indicator_name: Gas prepayment meter debt by supplier - £/week
   period_grain: SNAPSHOT
   unit: supplier_comparison
   file_path: bronze/ofgem/gas-prepayment-meter-cus.csv
-  period_column: null
+  period_column: col_1
   value_column: £/week
 - indicator_code: GAS_PREPAYMENT_PPM_CUSTO__WEEKS
   indicator_name: Gas prepayment debt weeks by supplier - Weeks

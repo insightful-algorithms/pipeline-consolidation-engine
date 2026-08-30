@@ -13,19 +13,22 @@ this logic lives.
 
 from framework.readers.csv_reader import read_csv
 
-# Real, confirmed structure for each file -- period_column is None
-# for the four supplier-snapshot files, since they have no period at
-# all; that absence IS the signal for SNAPSHOT grain.
+# Real, confirmed structure for each file. SNAPSHOT indicators have no
+# PERIOD, but they still have a real column holding the row's identity
+# (a supplier name) -- period_column here means "which column to read
+# out of the row for that purpose," whether it's a period or not.
+# For electricity-prepayment-m.csv and gas-prepayment-meter-cus.csv,
+# that column is the blank-header one our reader renamed to col_1.
 FILES = [
     {"path": "average-debt-level-where.csv", "period_column": "Quarter / Year", "grain": "QUARTER",
      "name_prefix": "Average debt level where no repayment plan"},
     {"path": "average-level-of-debt-re.csv", "period_column": "Category", "grain": "QUARTER",
      "name_prefix": "Average level of debt remaining under repayment plan"},
-    {"path": "electricity-prepayment-m.csv", "period_column": None, "grain": "SNAPSHOT",
+    {"path": "electricity-prepayment-m.csv", "period_column": "col_1", "grain": "SNAPSHOT",
      "name_prefix": "Electricity prepayment meter debt by supplier"},
     {"path": "electricity-prepayment-p.csv", "period_column": "Category", "grain": "SNAPSHOT",
      "name_prefix": "Electricity prepayment debt weeks by supplier"},
-    {"path": "gas-prepayment-meter-cus.csv", "period_column": None, "grain": "SNAPSHOT",
+    {"path": "gas-prepayment-meter-cus.csv", "period_column": "col_1", "grain": "SNAPSHOT",
      "name_prefix": "Gas prepayment meter debt by supplier"},
     {"path": "gas-prepayment-ppm-custo.csv", "period_column": "Category", "grain": "SNAPSHOT",
      "name_prefix": "Gas prepayment debt weeks by supplier"},
@@ -49,8 +52,6 @@ FILES = [
 def generate():
     entries = []
     for file_info in FILES:
-        # Reuse the real reader just to get real headers -- one row is
-        # enough, we only need the keys, not the full file.
         sample_row = read_csv(f"bronze/ofgem/{file_info['path']}")[0]
         headers = list(sample_row.keys())
         period_col = file_info["period_column"]

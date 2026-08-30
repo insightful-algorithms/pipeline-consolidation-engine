@@ -11,6 +11,25 @@ import hashlib
 from datetime import datetime, timezone
 
 
+def parse_period(period_raw: str, period_grain: str):
+    """
+    Normalise a raw period string into a real date, first-of-period,
+    according to the grain the config declares. SNAPSHOT indicators
+    never call this at all -- they have no period, handled separately
+    in transform_row.
+    """
+    if period_grain == "MONTH":
+        return datetime.strptime(period_raw + "-01", "%Y-%m-%d").date()
+
+    if period_grain == "QUARTER":
+        quarter_str, year_str = period_raw.split(" ")
+        quarter_number = int(quarter_str.replace("Q", ""))
+        first_month_of_quarter = {1: 1, 2: 4, 3: 7, 4: 10}[quarter_number]
+        return datetime(int(year_str), first_month_of_quarter, 1).date()
+
+    raise ValueError(f"Unsupported period_grain: {period_grain}")
+
+
 def transform_row(raw_row: dict, config: dict, source_file: str, source_format: str) -> list[dict]:
     """
     Transform one raw row into one OR MORE Silver-shaped records.
@@ -38,8 +57,15 @@ def transform_row(raw_row: dict, config: dict, source_file: str, source_format: 
         value_columns = [e["source_column"] for e in entries]
         period_column = "period"
 
-    period_raw = clean_row[period_column]
-    period_date = datetime.strptime(period_raw + "-01", "%Y-%m-%d").date()
+    if config["period_grain"] == "SNAPSHOT":
+        # No period at all -- the value under period_column IS the
+        # supplier name, not something to parse as a date.
+        period_date = None
+        dim_supplier_value = clean_row[period_column]
+    else:
+        period_raw = clean_row[period_column]
+        period_date = parse_period(period_raw, config["period_grain"])
+        dim_supplier_value = None
 
     results = []
     for entry, source_col in zip(entries, value_columns):
@@ -49,17 +75,17 @@ def transform_row(raw_row: dict, config: dict, source_file: str, source_format: 
 
         indicator_value = float(raw_value)
         if indicator_value < 0:
-            raise ValueError(f"Negative value for {entry['indicator_code']} in {period_raw} from {source_file}")
+            raise ValueError(f"Negative value for {entry['indicator_code']} from {source_file}")
 
         # Build a lookup of every value that COULD be part of a dedup key,
         # then genuinely read config["dedup_key"] to decide which of these
-        # actually get hashed, in the order it specifies. This is what
-        # makes dedup_key a real, load-bearing config field.
+        # actually get hashed, in the order it specifies.
         available_values = {
             "source_publisher": config["source_publisher"],
             "indicator_code": entry["indicator_code"],
             "geography": entry["geography"],
             "period_date": str(period_date),
+            "dim_supplier": str(dim_supplier_value),
         }
         key_fields = [str(available_values[field]) for field in config["dedup_key"]]
         indicator_id = hashlib.sha256("|".join(key_fields).encode()).hexdigest()
@@ -74,7 +100,7 @@ def transform_row(raw_row: dict, config: dict, source_file: str, source_format: 
             "period_grain": config["period_grain"],
             "indicator_value": indicator_value,
             "unit": entry["unit"],
-            "dim_supplier": None,
+            "dim_supplier": dim_supplier_value,
             "source_file": source_file,
             "source_format": source_format,
             "extracted_at": datetime.now(timezone.utc),
