@@ -1,0 +1,77 @@
+"""
+Generates the indicators section of the Ofgem config directly from
+each real file's actual headers -- avoids hand-typing 27 entries and
+the transcription risk that comes with it. Run once, output pasted
+into ofgem.yaml, same pattern as generate_insolvency_config.py.
+
+Deliberately reuses the real csv_reader module rather than
+re-implementing header-cleaning here -- a second, private copy of
+that logic previously fell out of sync with a real fix made to the
+reader, producing a wrong result. There should only ever be one place
+this logic lives.
+"""
+
+from framework.readers.csv_reader import read_csv
+
+# Real, confirmed structure for each file -- period_column is None
+# for the four supplier-snapshot files, since they have no period at
+# all; that absence IS the signal for SNAPSHOT grain.
+FILES = [
+    {"path": "average-debt-level-where.csv", "period_column": "Quarter / Year", "grain": "QUARTER",
+     "name_prefix": "Average debt level where no repayment plan"},
+    {"path": "average-level-of-debt-re.csv", "period_column": "Category", "grain": "QUARTER",
+     "name_prefix": "Average level of debt remaining under repayment plan"},
+    {"path": "electricity-prepayment-m.csv", "period_column": None, "grain": "SNAPSHOT",
+     "name_prefix": "Electricity prepayment meter debt by supplier"},
+    {"path": "electricity-prepayment-p.csv", "period_column": "Category", "grain": "SNAPSHOT",
+     "name_prefix": "Electricity prepayment debt weeks by supplier"},
+    {"path": "gas-prepayment-meter-cus.csv", "period_column": None, "grain": "SNAPSHOT",
+     "name_prefix": "Gas prepayment meter debt by supplier"},
+    {"path": "gas-prepayment-ppm-custo.csv", "period_column": "Category", "grain": "SNAPSHOT",
+     "name_prefix": "Gas prepayment debt weeks by supplier"},
+    {"path": "number-of-accounts-in-ar.csv", "period_column": "col_1", "grain": "QUARTER",
+     "name_prefix": "Accounts in arrears"},
+    {"path": "number-of-accounts-with.csv", "period_column": "col_1", "grain": "QUARTER",
+     "name_prefix": "Accounts with debt"},
+    {"path": "number-of-disconnections.csv", "period_column": "col_1", "grain": "QUARTER",
+     "name_prefix": "Disconnections"},
+    {"path": "number-of-domestic-smart.csv", "period_column": "Category", "grain": "QUARTER",
+     "name_prefix": "Self-disconnecting prepayment customers"},
+    {"path": "the-proportion-of-custom.csv", "period_column": "col_1", "grain": "QUARTER",
+     "name_prefix": "Proportion of customers"},
+    {"path": "total-financial-value-of.csv", "period_column": "Category", "grain": "QUARTER",
+     "name_prefix": "Total financial value of debt and arrears"},
+    {"path": "total-number-of-domestic.csv", "period_column": "Category", "grain": "QUARTER",
+     "name_prefix": "Total number of domestic customers"},
+]
+
+
+def generate():
+    entries = []
+    for file_info in FILES:
+        # Reuse the real reader just to get real headers -- one row is
+        # enough, we only need the keys, not the full file.
+        sample_row = read_csv(f"bronze/ofgem/{file_info['path']}")[0]
+        headers = list(sample_row.keys())
+        period_col = file_info["period_column"]
+        value_columns = [h for h in headers if h != period_col]
+
+        for value_col in value_columns:
+            code = f"{file_info['path'].replace('.csv', '').upper().replace('-', '_')}__{value_col.upper().replace(' ', '_').replace('&','AND').replace('(','').replace(')','').replace('£','GBP').replace('/','_')}"
+            entries.append({
+                "indicator_code": code,
+                "indicator_name": f"{file_info['name_prefix']} - {value_col}",
+                "period_grain": file_info["grain"],
+                "unit": "supplier_comparison" if file_info["grain"] == "SNAPSHOT" else "count",
+                "file_path": f"bronze/ofgem/{file_info['path']}",
+                "period_column": period_col,
+                "value_column": value_col,
+            })
+    return entries
+
+
+if __name__ == "__main__":
+    entries = generate()
+    print(f"Generated {len(entries)} indicators total.\n")
+    for e in entries:
+        print(e)
