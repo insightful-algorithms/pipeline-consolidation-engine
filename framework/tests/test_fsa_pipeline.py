@@ -25,8 +25,8 @@ def test_fsa_pipeline_produces_correct_row_count_and_no_duplicates():
 
     result = run_source("framework/config/sources/fsa.yaml")
 
-    assert result["total_rows_in_table"] == 32, (
-        f"Expected 32 distinct FSA months, got {result['total_rows_in_table']}"
+    assert result["rows_for_this_source"] == 32, (
+        f"Expected 32 distinct FSA months, got {result['rows_for_this_source']}"
     )
     assert result["duplicates_found"] == 0, (
         f"Expected zero duplicates, found {result['duplicates_found']}"

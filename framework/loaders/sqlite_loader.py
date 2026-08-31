@@ -13,6 +13,7 @@ be interpreted as a SQL command.
 """
 
 import sqlite3
+import uuid
 from pathlib import Path
 
 DB_PATH = Path(__file__).parent.parent.parent / "warehouse" / "dev.db"
@@ -81,7 +82,6 @@ def get_connection() -> sqlite3.Connection:
 
 
 
-import uuid  # add this import at the top of the file, alongside sqlite3 and Path
 
 REVISION_INSERT_SQL = """
 INSERT INTO indicator_revisions (
@@ -134,11 +134,17 @@ def load_rows(rows: list[dict]) -> dict:
 
     total_rows = conn.execute("SELECT COUNT(*) FROM stg_debt_indicators").fetchone()[0]
     distinct_keys = conn.execute("SELECT COUNT(DISTINCT indicator_id) FROM stg_debt_indicators").fetchone()[0]
+    this_source = rows[0]["source_publisher"] if rows else None
+    rows_for_this_source = conn.execute(
+        "SELECT COUNT(*) FROM stg_debt_indicators WHERE source_publisher = ?",
+        (this_source,)
+    ).fetchone()[0]
     conn.close()
 
     return {
         "rows_processed_this_run": len(rows),
         "total_rows_in_table": total_rows,
+        "rows_for_this_source": rows_for_this_source,
         "distinct_indicator_ids": distinct_keys,
         "duplicates_found": total_rows - distinct_keys,
         "revisions_logged_this_run": revisions_logged,
