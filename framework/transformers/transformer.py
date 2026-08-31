@@ -101,7 +101,7 @@ def transform_row(raw_row: dict, config: dict, source_file: str, source_format: 
     else:
         entries = mapping
         value_columns = [e["source_column"] for e in entries]
-        period_column = "period"
+        period_column = config["period_column"]
 
     row_period_grain = config["period_grain"]
 
@@ -124,7 +124,7 @@ def transform_row(raw_row: dict, config: dict, source_file: str, source_format: 
             continue
 
         indicator_value = float(raw_value)
-        if indicator_value < 0:
+        if indicator_value < 0 and config.get("allow_negative_values") is not True:
             raise ValueError(f"Negative value for {entry['indicator_code']} from {source_file}")
 
         available_values = {

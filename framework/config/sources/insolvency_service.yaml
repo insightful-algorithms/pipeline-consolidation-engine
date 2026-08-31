@@ -19,6 +19,7 @@ files:
     format: csv
 
 period_grain: MONTH
+period_column: period
 
 column_mapping:
   - source_column: EW_total_individuals_SA
