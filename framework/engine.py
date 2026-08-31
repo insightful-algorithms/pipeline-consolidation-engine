@@ -24,7 +24,12 @@ from framework.loaders.sqlite_loader import load_rows
 
 READERS = {
     "csv": lambda file_entry: read_csv(file_entry["path"]),
-    "xlsx": lambda file_entry: read_xlsx(file_entry["path"], sheet=file_entry["sheet"]),
+    "xlsx": lambda file_entry: read_xlsx(
+        file_entry["path"],
+        sheet=file_entry["sheet"],
+        header_row=file_entry.get("header_row", 1),
+        skip_rows_after_header=file_entry.get("skip_rows_after_header", 0),
+    ),
 }
 
 
