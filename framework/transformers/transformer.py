@@ -103,11 +103,15 @@ def transform_row(raw_row: dict, config: dict, source_file: str, source_format: 
         value_columns = [e["source_column"] for e in entries]
         period_column = "period"
 
+    row_period_grain = config["period_grain"]
+
     if config["period_grain"] == "SNAPSHOT":
-        # No period at all -- the value under period_column IS the
-        # supplier name, not something to parse as a date.
         period_date = None
         dim_supplier_value = clean_row[period_column]
+    elif config["period_grain"] == "MIXED":
+        period_raw = clean_row[period_column]
+        period_date, row_period_grain = parse_ons_period(period_raw)
+        dim_supplier_value = None
     else:
         period_raw = clean_row[period_column]
         period_date = parse_period(period_raw, config["period_grain"])
@@ -123,9 +127,6 @@ def transform_row(raw_row: dict, config: dict, source_file: str, source_format: 
         if indicator_value < 0:
             raise ValueError(f"Negative value for {entry['indicator_code']} from {source_file}")
 
-        # Build a lookup of every value that COULD be part of a dedup key,
-        # then genuinely read config["dedup_key"] to decide which of these
-        # actually get hashed, in the order it specifies.
         available_values = {
             "source_publisher": config["source_publisher"],
             "indicator_code": entry["indicator_code"],
@@ -143,7 +144,7 @@ def transform_row(raw_row: dict, config: dict, source_file: str, source_format: 
             "indicator_name": entry["indicator_name"],
             "geography": entry["geography"],
             "period_date": period_date,
-            "period_grain": config["period_grain"],
+            "period_grain": row_period_grain,
             "indicator_value": indicator_value,
             "unit": entry["unit"],
             "dim_supplier": dim_supplier_value,
