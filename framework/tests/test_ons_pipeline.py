@@ -20,10 +20,10 @@ def test_ons_pipeline_produces_correct_row_count_and_no_duplicates():
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
 
-    result = run_source("framework/config/sources/ons.yaml")
+    result = run_source("framework/config/sources/ons_m1.yaml")
 
-    assert result["rows_for_this_source"] == 234, (
-        f"Expected 684 ONS indicator rows, got {result['rows_for_this_source']}"
+    assert result["rows_for_this_source"] == 585, (
+        f"Expected 585 ONS indicator rows, got {result['rows_for_this_source']}"
     )
     assert result["duplicates_found"] == 0, (
         f"Expected zero duplicates, found {result['duplicates_found']}"

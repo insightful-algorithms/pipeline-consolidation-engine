@@ -23,8 +23,8 @@ def test_ofgem_pipeline_produces_correct_row_count_and_no_duplicates():
 
     result = run_source("framework/config/sources/ofgem.yaml")
 
-    assert result["rows_for_this_source"] == 889, (
-        f"Expected 889 Ofgem indicator rows, got {result['rows_for_this_source']}"
+    assert result["rows_for_this_source"] == 1005, (
+        f"Expected 1005 Ofgem indicator rows, got {result['rows_for_this_source']}"
     )
     assert result["duplicates_found"] == 0, (
         f"Expected zero duplicates, found {result['duplicates_found']}"
