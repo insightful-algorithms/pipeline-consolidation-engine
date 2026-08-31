@@ -11,6 +11,52 @@ import hashlib
 from datetime import datetime, timezone
 
 
+
+def parse_ons_period(period_raw) -> tuple:
+    """
+    ONS's M1 sheet mixes four period formats in one column:
+      - Financial year, string:  'Apr 1997 to Mar 1998'
+      - Quarter, abbreviated:    'Jul to Sep 2022'
+      - Quarter, full month:     'April to Jun 2023' (ONS's own
+        inconsistent spelling -- confirmed real, not our error)
+      - Bare calendar year, int: 1997
+
+    Returns a (period_date, period_grain) tuple, so the caller knows
+    both the normalised date AND which grain this particular row
+    actually represents -- necessary because, unlike every other
+    source, grain varies row-to-row here, not per-config.
+    """
+    MONTH_TO_NUMBER = {
+        "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "April": 4, "May": 5, "Jun": 6,
+        "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12,
+    }
+
+    if isinstance(period_raw, int):
+        return datetime(period_raw, 1, 1).date(), "YEAR"
+
+    if " to " not in period_raw:
+        raise ValueError(f"Unrecognised ONS period format: {period_raw!r}")
+
+    start_part, end_part = period_raw.split(" to ")
+    start_part = start_part.strip()
+    end_month_name, end_year_str = end_part.strip().rsplit(" ", 1)
+    end_year = int(end_year_str)
+
+    # A financial year's start side has a year attached ("Apr 1997");
+    # a quarter's start side is just the month ("Jul"). That presence
+    # of a year is the real signal, not the month name alone.
+    start_words = start_part.split(" ")
+    if len(start_words) == 2:
+        # Financial year: "Apr 1997 to Mar 1998" -> starts 1 Apr 1997
+        start_month_name, start_year_str = start_words
+        return datetime(int(start_year_str), MONTH_TO_NUMBER[start_month_name], 1).date(), "FINANCIAL_YEAR"
+
+    # Otherwise, a calendar quarter: "Jul to Sep 2022" -> starts 1 Jul 2022
+    start_month_number = MONTH_TO_NUMBER[start_part]
+    return datetime(end_year, start_month_number, 1).date(), "QUARTER"
+
+
+
 def parse_period(period_raw: str, period_grain: str):
     """
     Normalise a raw period string into a real date, first-of-period,
