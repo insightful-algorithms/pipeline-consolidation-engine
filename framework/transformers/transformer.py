@@ -57,6 +57,27 @@ def parse_ons_period(period_raw) -> tuple:
 
 
 
+def parse_ni_period(period_raw: str) -> tuple:
+    """
+    Table_9 (Northern Ireland) mixes two formats in one column:
+      - Bare calendar year, string: '2019'
+      - Month and year, string:     'Jan 2019'
+    Unlike ONS's four-format mix, both are strings here -- no integer
+    case to handle.
+    """
+    MONTH_TO_NUMBER = {
+        "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
+        "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12,
+    }
+
+    if period_raw.isdigit() and len(period_raw) == 4:
+        return datetime(int(period_raw), 1, 1).date(), "YEAR"
+
+    month_name, year_str = period_raw.split(" ")
+    return datetime(int(year_str), MONTH_TO_NUMBER[month_name], 1).date(), "MONTH"
+
+
+
 def parse_period(period_raw: str, period_grain: str):
     """
     Normalise a raw period string into a real date, first-of-period,

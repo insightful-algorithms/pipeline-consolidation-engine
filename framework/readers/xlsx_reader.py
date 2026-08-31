@@ -9,7 +9,7 @@ nothing about which columns matter -- that's the transformer's job.
 import openpyxl
 
 
-def read_xlsx(path: str, sheet: str, header_row: int = 1, skip_rows_after_header: int = 0) -> list[dict]:
+def read_xlsx(path: str, sheet: str, header_row: int = 1, skip_rows_after_header: int = 0, stop_before_prefix: str = None) -> list[dict]:
     """
     Read a single sheet from an XLSX file and return its rows as a
     list of dictionaries, keyed by that sheet's own header row.
@@ -19,6 +19,11 @@ def read_xlsx(path: str, sheet: str, header_row: int = 1, skip_rows_after_header
     sheet needs header_row=5 and skip_rows_after_header=1, since its
     real header sits five rows down and is followed by a metadata row
     ("Dataset identifier code") that must be skipped, not read as data.
+
+    stop_before_prefix, if set, halts reading the moment a row's first
+    cell starts with this text -- handles trailing summary sections
+    (e.g. Table_9's "Percentage change, latest month compared to:"
+    block) without needing to know in advance how many rows they span.
     """
     workbook = openpyxl.load_workbook(path, data_only=True)
     worksheet = workbook[sheet]
@@ -31,6 +36,8 @@ def read_xlsx(path: str, sheet: str, header_row: int = 1, skip_rows_after_header
     for row in data_rows:
         if row[0] is None:
             continue
+        if stop_before_prefix and str(row[0]).startswith(stop_before_prefix):
+            break
         rows.append(dict(zip(headers, row)))
 
     return rows
