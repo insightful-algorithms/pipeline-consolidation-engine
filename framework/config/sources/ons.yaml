@@ -1,0 +1,56 @@
+# ONS Government Deficit and Debt (M1 sheet only for now)
+# Scope: M1 -- 5 headline indicators, mixed period grain
+# (financial year / quarter / bare calendar year, all in one
+# column). M2-M7 and the discontinued M8R revisions table are
+# a deliberate follow-up, not covered here.
+# The assert above confirms every real column name matches
+# what's actually in the file before writing anything.
+
+source_publisher: ONS
+geography: United Kingdom
+period_grain: MIXED
+files:
+- path: bronze/ons/rftm17tables.xlsx
+  format: xlsx
+  sheet: M1
+  header_row: 5
+  skip_rows_after_header: 1
+- path: bronze/ons/rftm17tables (5).xlsx
+  format: xlsx
+  sheet: M1
+  header_row: 5
+  skip_rows_after_header: 1
+column_mapping:
+- source_column: "General government net borrowing \n(£ million)"
+  indicator_code: NET_BORROWING
+  indicator_name: General government net borrowing
+  geography: United Kingdom
+  unit: £ million
+- source_column: General government gross consolidated debt at nominal value (£ million)
+  indicator_code: GROSS_DEBT
+  indicator_name: General government gross consolidated debt at nominal value
+  geography: United Kingdom
+  unit: £ million
+- source_column: Gross domestic product (GDP) at current market prices (£ million)
+    [note 2]
+  indicator_code: GDP_CURRENT_PRICES
+  indicator_name: Gross domestic product (GDP) at current market prices
+  geography: United Kingdom
+  unit: £ million
+- source_column: "Net borrowing as a percentage of GDP (percentage points) \n[note\
+    \ 2]"
+  indicator_code: NET_BORROWING_PCT_GDP
+  indicator_name: Net borrowing as a percentage of GDP
+  geography: United Kingdom
+  unit: percentage points
+- source_column: Gross consolidated debt as a percentage of GDP (percentage points)
+    [note 2]
+  indicator_code: GROSS_DEBT_PCT_GDP
+  indicator_name: Gross consolidated debt as a percentage of GDP
+  geography: United Kingdom
+  unit: percentage points
+dedup_key:
+- source_publisher
+- indicator_code
+- geography
+- period_date
