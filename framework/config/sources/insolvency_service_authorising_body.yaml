@@ -1,0 +1,23 @@
+# Insolvency Service — Debt Relief Orders by Authorising Body (Table_7a)
+# Genuinely different shape from every other source: one row per
+# authorising body, with dozens of period columns (annual 2016-2025,
+# monthly Jan 2023-Jul 2026) spread across that row. Unpivoted via
+# transform_wide_row, reusing parse_ni_period on each column header.
+
+source_publisher: INSOLVENCY_SERVICE
+geography: "England & Wales"
+indicator_code: DRO_BY_AUTHORISING_BODY
+indicator_name: "Debt relief orders by authorising body"
+unit: count
+
+files:
+  - path: "bronze/insolvency_service/Data_Tables_in_Excel__xlsx__Format_-_Individual_Insolvency_Statistics_July_2026.xlsx"
+    format: xlsx
+    sheet: Table_7a
+    header_row: 5
+
+entity_column: "Authorising Body"
+exclude_columns: ["Notes"]
+
+dedup_key:
+  [source_publisher, indicator_code, geography, dim_supplier, period_date]

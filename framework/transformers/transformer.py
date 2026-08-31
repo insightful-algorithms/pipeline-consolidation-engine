@@ -179,3 +179,70 @@ def transform_row(raw_row: dict, config: dict, source_file: str, source_format: 
         })
 
     return results
+
+
+
+def transform_wide_row(raw_row: dict, config: dict, source_file: str, source_format: str) -> list[dict]:
+    """
+    Unpivots one WIDE row into many long Silver rows -- one per
+    period. Table_7a's shape: one row is one ENTITY (an authorising
+    body), with dozens of period columns spread across it, rather
+    than one row per period like every other source.
+
+    Reuses parse_ni_period to interpret each period-shaped column
+    NAME, since Table_7a's own column headers ('2016', 'Jan 2023')
+    are in exactly the same two formats NI's period VALUES use.
+    """
+    entity_column = config["entity_column"]
+    entity_name = raw_row.get(entity_column)
+    if not entity_name:
+        return []
+
+    exclude_columns = set(config.get("exclude_columns", [])) | {entity_column}
+
+    results = []
+    for column_name, value in raw_row.items():
+        if column_name in exclude_columns or column_name is None:
+            continue
+        if value in (None, "", "[x]", "[z]"):
+            continue
+
+        try:
+            period_date, period_grain = parse_ni_period(str(column_name))
+        except (ValueError, KeyError):
+            continue  # not a period-shaped column (e.g. "Notes") -- skip safely
+
+        indicator_value = float(value)
+        if indicator_value < 0 and config.get("allow_negative_values") is not True:
+            raise ValueError(
+                f"Negative value for {config['indicator_code']} "
+                f"({entity_name}, {column_name}) from {source_file}"
+            )
+
+        available_values = {
+            "source_publisher": config["source_publisher"],
+            "indicator_code": config["indicator_code"],
+            "geography": config["geography"],
+            "period_date": str(period_date),
+            "dim_supplier": str(entity_name),
+        }
+        key_fields = [str(available_values[field]) for field in config["dedup_key"]]
+        indicator_id = hashlib.sha256("|".join(key_fields).encode()).hexdigest()
+
+        results.append({
+            "indicator_id": indicator_id,
+            "source_publisher": config["source_publisher"],
+            "indicator_code": config["indicator_code"],
+            "indicator_name": config["indicator_name"],
+            "geography": config["geography"],
+            "period_date": period_date,
+            "period_grain": period_grain,
+            "indicator_value": indicator_value,
+            "unit": config["unit"],
+            "dim_supplier": entity_name,
+            "source_file": source_file,
+            "source_format": source_format,
+            "extracted_at": datetime.now(timezone.utc),
+        })
+
+    return results

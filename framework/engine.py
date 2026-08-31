@@ -19,7 +19,7 @@ loading strategy to use based on which top-level key is present.
 import yaml
 from framework.readers.csv_reader import read_csv
 from framework.readers.xlsx_reader import read_xlsx
-from framework.transformers.transformer import transform_row
+from framework.transformers.transformer import transform_row, transform_wide_row
 from framework.loaders.sqlite_loader import load_rows
 
 READERS = {
@@ -38,7 +38,9 @@ def run_source(config_path: str) -> dict:
     with open(config_path) as f:
         config = yaml.safe_load(f)
 
-    if "indicators" in config:
+    if "entity_column" in config:
+        return _run_wide_shaped_source(config)
+    elif "indicators" in config:
         return _run_indicators_shaped_source(config)
     else:
         return _run_files_shaped_source(config)
@@ -99,6 +101,29 @@ def _run_indicators_shaped_source(config: dict) -> dict:
                 )
             )
     return load_rows(all_rows)
+
+
+
+def _run_wide_shaped_source(config: dict) -> dict:
+    """Table_7a shape: one row per entity, many period columns."""
+    all_rows = []
+    for file_entry in config["files"]:
+        raw_rows = read_xlsx(
+            file_entry["path"],
+            sheet=file_entry["sheet"],
+            header_row=file_entry.get("header_row", 1),
+            skip_rows_after_header=file_entry.get("skip_rows_after_header", 0),
+        )
+        for raw_row in raw_rows:
+            all_rows.extend(
+                transform_wide_row(
+                    raw_row, config,
+                    source_file=file_entry["path"],
+                    source_format=file_entry["format"],
+                )
+            )
+    return load_rows(all_rows)
+
 
 
 if __name__ == "__main__":
