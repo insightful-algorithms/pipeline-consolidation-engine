@@ -133,6 +133,10 @@ def transform_row(raw_row: dict, config: dict, source_file: str, source_format: 
         period_raw = clean_row[period_column]
         period_date, row_period_grain = parse_ons_period(period_raw)
         dim_supplier_value = None
+    elif config["period_grain"] == "NI_MIXED":
+        period_raw = clean_row[period_column]
+        period_date, row_period_grain = parse_ni_period(period_raw)
+        dim_supplier_value = None
     else:
         period_raw = clean_row[period_column]
         period_date = parse_period(period_raw, config["period_grain"])
