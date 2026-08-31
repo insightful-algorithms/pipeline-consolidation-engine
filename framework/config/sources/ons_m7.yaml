@@ -1,0 +1,60 @@
+# ONS Government Deficit and Debt (M7)
+# Generated from real reader output -- column count and exact
+# text varies too much per sheet to hand-type safely (M5 alone has
+# 17 columns). Real inconsistency confirmed: this sheet's period
+# column is named 'Time period'.
+
+source_publisher: ONS
+geography: United Kingdom
+period_grain: MIXED
+period_column: Time period
+allow_negative_values: true
+files:
+- path: bronze/ons/rftm17tables.xlsx
+  format: xlsx
+  sheet: M7
+  header_row: 5
+  skip_rows_after_header: 1
+- path: bronze/ons/rftm17tables (5).xlsx
+  format: xlsx
+  sheet: M7
+  header_row: 5
+  skip_rows_after_header: 1
+column_mapping:
+- source_column: "General government net borrowing (UK public sector finances version)\
+    \ (£ million) \n[note 8]"
+  indicator_code: GENERAL_GOVERNMENT_NET_BORROWING_UK_PUBLIC_SECTOR_FINANCES_V
+  indicator_name: General government net borrowing (UK public sector finances version)
+    (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: General government net borrowing (EDP version) (£ million) [note
+    9]
+  indicator_code: GENERAL_GOVERNMENT_NET_BORROWING_EDP_VERSION_MILLION
+  indicator_name: General government net borrowing (EDP version) (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: Gross domestic product (GDP) at current market prices (£ million)
+    [note 2]
+  indicator_code: GROSS_DOMESTIC_PRODUCT_GDP_AT_CURRENT_MARKET_PRICES_MILLION
+  indicator_name: Gross domestic product (GDP) at current market prices (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: Net borrowing as a percentage of GDP (public sector finances version)
+    (percentage points) [note 2]
+  indicator_code: NET_BORROWING_AS_A_PERCENTAGE_OF_GDP_PUBLIC_SECTOR_FINANCES_
+  indicator_name: Net borrowing as a percentage of GDP (public sector finances version)
+    (percentage points)
+  geography: United Kingdom
+  unit: percentage points
+- source_column: Net borrowing as a percentage of GDP (EDP version) percentage points)
+    [note 8] [note 9] [note 10]
+  indicator_code: NET_BORROWING_AS_A_PERCENTAGE_OF_GDP_EDP_VERSION_PERCENTAGE_
+  indicator_name: Net borrowing as a percentage of GDP (EDP version) percentage points)
+  geography: United Kingdom
+  unit: percentage points
+dedup_key:
+- source_publisher
+- indicator_code
+- geography
+- period_date

@@ -1,0 +1,72 @@
+# ONS Government Deficit and Debt (M4)
+# Generated from real reader output -- column count and exact
+# text varies too much per sheet to hand-type safely (M5 alone has
+# 17 columns). Real inconsistency confirmed: this sheet's period
+# column is named 'Time period'.
+
+source_publisher: ONS
+geography: United Kingdom
+period_grain: MIXED
+period_column: Time period
+allow_negative_values: true
+files:
+- path: bronze/ons/rftm17tables.xlsx
+  format: xlsx
+  sheet: M4
+  header_row: 5
+  skip_rows_after_header: 1
+- path: bronze/ons/rftm17tables (5).xlsx
+  format: xlsx
+  sheet: M4
+  header_row: 5
+  skip_rows_after_header: 1
+column_mapping:
+- source_column: "General Government Net borrowing \n(£ million)"
+  indicator_code: GENERAL_GOVERNMENT_NET_BORROWING_MILLION
+  indicator_name: General Government Net borrowing  (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: "Net acquisition of financial assets \n(£ million)"
+  indicator_code: NET_ACQUISITION_OF_FINANCIAL_ASSETS_MILLION
+  indicator_name: Net acquisition of financial assets  (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Consolidating transactions
+
+    (£ million)'
+  indicator_code: CONSOLIDATING_TRANSACTIONS_MILLION
+  indicator_name: Consolidating transactions (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: Net incurrence of non-debt liabilities (£ million)
+  indicator_code: NET_INCURRENCE_OF_NONDEBT_LIABILITIES_MILLION
+  indicator_name: Net incurrence of non-debt liabilities (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: Adjustment for holding gains/losses (£ million) [note 4]
+  indicator_code: ADJUSTMENT_FOR_HOLDING_GAINSLOSSES_MILLION
+  indicator_name: Adjustment for holding gains/losses (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: Adjustment from market to nominal value (£ million)
+  indicator_code: ADJUSTMENT_FROM_MARKET_TO_NOMINAL_VALUE_MILLION
+  indicator_name: Adjustment from market to nominal value (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: Other adjustments (£ million) [note 5]
+  indicator_code: OTHER_ADJUSTMENTS_MILLION
+  indicator_name: Other adjustments (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: Increase in general government gross consolidated debt at nominal
+    value (£ million)
+  indicator_code: INCREASE_IN_GENERAL_GOVERNMENT_GROSS_CONSOLIDATED_DEBT_AT_NO
+  indicator_name: Increase in general government gross consolidated debt at nominal
+    value (£ million)
+  geography: United Kingdom
+  unit: £ million
+dedup_key:
+- source_publisher
+- indicator_code
+- geography
+- period_date

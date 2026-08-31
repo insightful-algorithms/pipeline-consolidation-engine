@@ -1,0 +1,127 @@
+# ONS Government Deficit and Debt (M5)
+# Generated from real reader output -- column count and exact
+# text varies too much per sheet to hand-type safely (M5 alone has
+# 17 columns). Real inconsistency confirmed: this sheet's period
+# column is named 'Time Period'.
+
+source_publisher: ONS
+geography: United Kingdom
+period_grain: MIXED
+period_column: Time Period
+allow_negative_values: true
+files:
+- path: bronze/ons/rftm17tables.xlsx
+  format: xlsx
+  sheet: M5
+  header_row: 5
+  skip_rows_after_header: 1
+- path: bronze/ons/rftm17tables (5).xlsx
+  format: xlsx
+  sheet: M5
+  header_row: 5
+  skip_rows_after_header: 1
+column_mapping:
+- source_column: General government total financial liabilities (£ million) [note
+    6]
+  indicator_code: GENERAL_GOVERNMENT_TOTAL_FINANCIAL_LIABILITIES_MILLION
+  indicator_name: General government total financial liabilities (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: "Other Accounts payable (F.8) \n(£ million) "
+  indicator_code: OTHER_ACCOUNTS_PAYABLE_F8_MILLION
+  indicator_name: Other Accounts payable (F.8)  (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Monetary gold and special drawing rights (F.1) (£ million) '
+  indicator_code: MONETARY_GOLD_AND_SPECIAL_DRAWING_RIGHTS_F1_MILLION
+  indicator_name: Monetary gold and special drawing rights (F.1) (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: "Insurance, pension & standardised guarantees (F.6) \n(£ million) "
+  indicator_code: INSURANCE_PENSION_STANDARDISED_GUARANTEES_F6_MILLION
+  indicator_name: Insurance, pension & standardised guarantees (F.6)  (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'General government gross unconsolidated debt at market prices (£
+    million) [note 15] '
+  indicator_code: GENERAL_GOVERNMENT_GROSS_UNCONSOLIDATED_DEBT_AT_MARKET_PRICE
+  indicator_name: General government gross unconsolidated debt at market prices (£
+    million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: "Consolidation: LG deposits with CG \n(£ million) "
+  indicator_code: CONSOLIDATION_LG_DEPOSITS_WITH_CG_MILLION
+  indicator_name: 'Consolidation: LG deposits with CG  (£ million)'
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Consolidation: LG holdings of treasury bills (£ million) '
+  indicator_code: CONSOLIDATION_LG_HOLDINGS_OF_TREASURY_BILLS_MILLION
+  indicator_name: 'Consolidation: LG holdings of treasury bills (£ million)'
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Consolidation: LG holdings of gilts
+
+    (£ million) '
+  indicator_code: CONSOLIDATION_LG_HOLDINGS_OF_GILTS_MILLION
+  indicator_name: 'Consolidation: LG holdings of gilts (£ million)'
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Consolidation: CG loans to LG (£ million) '
+  indicator_code: CONSOLIDATION_CG_LOANS_TO_LG_MILLION
+  indicator_name: 'Consolidation: CG loans to LG (£ million)'
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Consolidation: LG loans to CG (£ million) '
+  indicator_code: CONSOLIDATION_LG_LOANS_TO_CG_MILLION
+  indicator_name: 'Consolidation: LG loans to CG (£ million)'
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Total consolidation
+
+    (£ million)'
+  indicator_code: TOTAL_CONSOLIDATION_MILLION
+  indicator_name: Total consolidation (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'General government gross consolidated debt at market prices (£ million)
+    [note 16] '
+  indicator_code: GENERAL_GOVERNMENT_GROSS_CONSOLIDATED_DEBT_AT_MARKET_PRICES_
+  indicator_name: General government gross consolidated debt at market prices (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'British central government securities at market prices
+
+    (£ million) '
+  indicator_code: BRITISH_CENTRAL_GOVERNMENT_SECURITIES_AT_MARKET_PRICES_MILLI
+  indicator_name: British central government securities at market prices (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'British central government securities at nominal prices
+
+    (£ million) '
+  indicator_code: BRITISH_CENTRAL_GOVERNMENT_SECURITIES_AT_NOMINAL_PRICES_MILL
+  indicator_name: British central government securities at nominal prices (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Other bonds at market prices (£ million) '
+  indicator_code: OTHER_BONDS_AT_MARKET_PRICES_MILLION
+  indicator_name: Other bonds at market prices (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: "Other bonds at nominal prices \n(£ million) "
+  indicator_code: OTHER_BONDS_AT_NOMINAL_PRICES_MILLION
+  indicator_name: Other bonds at nominal prices  (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: General government gross consolidated debt at nominal prices (£ million)
+    [note 7] [note 17]
+  indicator_code: GENERAL_GOVERNMENT_GROSS_CONSOLIDATED_DEBT_AT_NOMINAL_PRICES
+  indicator_name: General government gross consolidated debt at nominal prices (£
+    million)
+  geography: United Kingdom
+  unit: £ million
+dedup_key:
+- source_publisher
+- indicator_code
+- geography
+- period_date

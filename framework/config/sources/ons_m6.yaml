@@ -1,0 +1,103 @@
+# ONS Government Deficit and Debt (M6)
+# Generated from real reader output -- column count and exact
+# text varies too much per sheet to hand-type safely (M5 alone has
+# 17 columns). Real inconsistency confirmed: this sheet's period
+# column is named 'Time Period'.
+
+source_publisher: ONS
+geography: United Kingdom
+period_grain: MIXED
+period_column: Time Period
+allow_negative_values: true
+files:
+- path: bronze/ons/rftm17tables.xlsx
+  format: xlsx
+  sheet: M6
+  header_row: 5
+  skip_rows_after_header: 1
+- path: bronze/ons/rftm17tables (5).xlsx
+  format: xlsx
+  sheet: M6
+  header_row: 5
+  skip_rows_after_header: 1
+column_mapping:
+- source_column: General government transations in financial liabilities (£ million)
+    [note 6]
+  indicator_code: GENERAL_GOVERNMENT_TRANSATIONS_IN_FINANCIAL_LIABILITIES_MILL
+  indicator_name: General government transations in financial liabilities (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Other Accounts payable (F.8)
+
+    (£ million)'
+  indicator_code: OTHER_ACCOUNTS_PAYABLE_F8_MILLION
+  indicator_name: Other Accounts payable (F.8) (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: Monetary gold and special drawing rights (F.1) (£ million)
+  indicator_code: MONETARY_GOLD_AND_SPECIAL_DRAWING_RIGHTS_F1_MILLION
+  indicator_name: Monetary gold and special drawing rights (F.1) (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Insurance technical reserves (F.6)
+
+    (£ million)'
+  indicator_code: INSURANCE_TECHNICAL_RESERVES_F6_MILLION
+  indicator_name: Insurance technical reserves (F.6) (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'General government unconsolidated transactions in Maastricht debt
+    instruments
+
+    (£ million) [note 18]'
+  indicator_code: GENERAL_GOVERNMENT_UNCONSOLIDATED_TRANSACTIONS_IN_MAASTRICHT
+  indicator_name: General government unconsolidated transactions in Maastricht debt
+    instruments (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Consolidation: LG deposits with CG
+
+    (£ million)'
+  indicator_code: CONSOLIDATION_LG_DEPOSITS_WITH_CG_MILLION
+  indicator_name: 'Consolidation: LG deposits with CG (£ million)'
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Consolidation: LG holdings of treasury bills
+
+    (£ million)'
+  indicator_code: CONSOLIDATION_LG_HOLDINGS_OF_TREASURY_BILLS_MILLION
+  indicator_name: 'Consolidation: LG holdings of treasury bills (£ million)'
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Consolidation: LG holdings of gilts (£ million)'
+  indicator_code: CONSOLIDATION_LG_HOLDINGS_OF_GILTS_MILLION
+  indicator_name: 'Consolidation: LG holdings of gilts (£ million)'
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Consolidation: CG loans to LG (£ million)'
+  indicator_code: CONSOLIDATION_CG_LOANS_TO_LG_MILLION
+  indicator_name: 'Consolidation: CG loans to LG (£ million)'
+  geography: United Kingdom
+  unit: £ million
+- source_column: 'Consolidation: LG loans to CG (£ million)'
+  indicator_code: CONSOLIDATION_LG_LOANS_TO_CG_MILLION
+  indicator_name: 'Consolidation: LG loans to CG (£ million)'
+  geography: United Kingdom
+  unit: £ million
+- source_column: "Total consolidating transactions \n(£ million)"
+  indicator_code: TOTAL_CONSOLIDATING_TRANSACTIONS_MILLION
+  indicator_name: Total consolidating transactions  (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: "General government consolidated transactions in Maastricht debt\
+    \ instruments \n(£ million) [note 19]"
+  indicator_code: GENERAL_GOVERNMENT_CONSOLIDATED_TRANSACTIONS_IN_MAASTRICHT_D
+  indicator_name: General government consolidated transactions in Maastricht debt
+    instruments  (£ million)
+  geography: United Kingdom
+  unit: £ million
+dedup_key:
+- source_publisher
+- indicator_code
+- geography
+- period_date

@@ -1,0 +1,55 @@
+# ONS Government Deficit and Debt (M3)
+# Generated from real reader output -- column count and exact
+# text varies too much per sheet to hand-type safely (M5 alone has
+# 17 columns). Real inconsistency confirmed: this sheet's period
+# column is named 'Time period'.
+
+source_publisher: ONS
+geography: United Kingdom
+period_grain: MIXED
+period_column: Time period
+allow_negative_values: true
+files:
+- path: bronze/ons/rftm17tables.xlsx
+  format: xlsx
+  sheet: M3
+  header_row: 5
+  skip_rows_after_header: 1
+- path: bronze/ons/rftm17tables (5).xlsx
+  format: xlsx
+  sheet: M3
+  header_row: 5
+  skip_rows_after_header: 1
+column_mapping:
+- source_column: Loans (£ million)
+  indicator_code: LOANS_MILLION
+  indicator_name: Loans (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: Currency and deposits (£ million)
+  indicator_code: CURRENCY_AND_DEPOSITS_MILLION
+  indicator_name: Currency and deposits (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: Bills and short-term bonds (£ million)
+  indicator_code: BILLS_AND_SHORTTERM_BONDS_MILLION
+  indicator_name: Bills and short-term bonds (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: Medium and long-term bonds (£ million)
+  indicator_code: MEDIUM_AND_LONGTERM_BONDS_MILLION
+  indicator_name: Medium and long-term bonds (£ million)
+  geography: United Kingdom
+  unit: £ million
+- source_column: "General government transactions in Maastricht debt instruments \n\
+    (£ million) [note 12]"
+  indicator_code: GENERAL_GOVERNMENT_TRANSACTIONS_IN_MAASTRICHT_DEBT_INSTRUMEN
+  indicator_name: General government transactions in Maastricht debt instruments  (£
+    million)
+  geography: United Kingdom
+  unit: £ million
+dedup_key:
+- source_publisher
+- indicator_code
+- geography
+- period_date
