@@ -1,0 +1,41 @@
+# Insolvency Service — Individual Insolvencies, Northern Ireland (Table_9)
+# Source: Department for the Economy, Northern Ireland (via Insolvency
+# Service's published workbook). Genuinely different geography and
+# grain from the main England & Wales Long-Run Series config, so kept
+# as its own file rather than folded into insolvency_service.yaml.
+
+source_publisher: INSOLVENCY_SERVICE
+geography: "Northern Ireland"
+period_grain: NI_MIXED
+period_column: Period
+
+files:
+  - path: "bronze/insolvency_service/Data_Tables_in_Excel__xlsx__Format_-_Individual_Insolvency_Statistics_July_2026.xlsx"
+    format: xlsx
+    sheet: Table_9
+    header_row: 7
+    stop_before_prefix: "Percentage change"
+
+column_mapping:
+  - source_column: "Total individual insolvencies"
+    indicator_code: NI_TOTAL_INDIVIDUALS
+    indicator_name: "Total individual insolvencies"
+    geography: "Northern Ireland"
+    unit: count
+  - source_column: Bankruptcies
+    indicator_code: NI_BANKRUPTCY
+    indicator_name: Bankruptcies
+    geography: "Northern Ireland"
+    unit: count
+  - source_column: "Debt relief orders"
+    indicator_code: NI_DRO
+    indicator_name: "Debt relief orders"
+    geography: "Northern Ireland"
+    unit: count
+  - source_column: "Individual voluntary arrangements"
+    indicator_code: NI_IVA
+    indicator_name: "Individual voluntary arrangements"
+    geography: "Northern Ireland"
+    unit: count
+
+dedup_key: [source_publisher, indicator_code, geography, period_date]

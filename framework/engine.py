@@ -29,6 +29,7 @@ READERS = {
         sheet=file_entry["sheet"],
         header_row=file_entry.get("header_row", 1),
         skip_rows_after_header=file_entry.get("skip_rows_after_header", 0),
+        stop_before_prefix=file_entry.get("stop_before_prefix"),
     ),
 }
 
