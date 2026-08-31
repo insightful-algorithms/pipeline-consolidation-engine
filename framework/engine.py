@@ -35,7 +35,7 @@ READERS = {
 
 
 def run_source(config_path: str) -> dict:
-    with open(config_path) as f:
+    with open(config_path, encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
     if "entity_column" in config:
