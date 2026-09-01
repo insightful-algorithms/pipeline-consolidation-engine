@@ -3,3 +3,11 @@ __pycache__/
 *.pyc
 .env
 warehouse/*.db
+# Diagnostic scripts used during ONS debugging, not part of the framework
+framework/tests/manual_compare_ofgem_before_after.py
+framework/tests/manual_diff_config_structure.py
+framework/tests/manual_find_unmatched_publisher_row.py
+framework/tests/manual_trace_engine_loop.py
+framework/tests/manual_trace_load_call.py
+framework/tests/manual_trace_transform_row.py
+framework/tests/manual_trace_zero_rows.py
